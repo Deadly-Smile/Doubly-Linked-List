@@ -8,21 +8,26 @@
 
 struct Node{
     Node *previous;
-    Node *Next;
+    Node *next;
     int data;
 };
 
 
 class LinkedList {
 private:
-    Node *head;
-    Node *tail;
+    Node *head = nullptr;
+    Node *tail = nullptr;
+    Node *current = nullptr;
 public:
     LinkedList();
-    LinkedList(const LinkedList &obj);
-    LinkedList(int array[]);
+    LinkedList(LinkedList &obj);
+    LinkedList(const int array[]);
+
+    virtual ~LinkedList();
 
     int &at(int index);
+    int &atNext();
+    int &atPrevious();
 
     void pushBack(int data);
     void pushFront(int data);
@@ -32,10 +37,14 @@ public:
     void findAndRemove(int data);
     void popFront();
     void popBack();
+    int popAndGetFront();
+    int popAndGetBack();
+    int getFront();
+    int getBack();
 
-    void size();
-    void max();
-    void min();
+    int size();
+    int max();
+    int min();
 
     void search(int data);
     void sort();
