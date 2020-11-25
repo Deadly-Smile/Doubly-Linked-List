@@ -3,6 +3,7 @@
 //
 
 #include <climits>
+#include <iostream>
 #include "LinkedList.h"
 
 LinkedList::LinkedList() {
@@ -94,15 +95,95 @@ int &LinkedList::atPrevious() {
 }
 
 void LinkedList::pushBack(int data) {
+    Node *newCurrent{nullptr};
+    newCurrent->next = nullptr;
+    newCurrent->data = data;
 
+    if(size() == 0){
+        newCurrent->previous = nullptr;
+
+        head = newCurrent;
+        tail = newCurrent;
+    }else if(size() == 1){
+        newCurrent->previous = head;
+        tail = newCurrent;
+    }else{
+        newCurrent->previous = tail;
+        tail = newCurrent;
+    }
+
+    newCurrent = nullptr;
+    delete newCurrent;
 }
 
 void LinkedList::pushFront(int data) {
+    Node *newCurrent{nullptr};
+    newCurrent->previous = nullptr;
+    newCurrent->data = data;
 
+    if(size() == 0){
+        newCurrent->next = nullptr;
+
+        head = newCurrent;
+        tail = newCurrent;
+    }else if(size() == 1){
+        newCurrent->next = tail;
+        head = newCurrent;
+    }else{
+        newCurrent->next = head;
+        head = newCurrent;
+    }
+
+    newCurrent = nullptr;
+    delete newCurrent;
 }
 
-void LinkedList::insert(int data, int position) {
+void LinkedList::insert(int data, unsigned int position) {
 
+    int length{size()};
+
+    if(length < position){
+        std::cout<<"No such position, operation failed"<<std::endl;
+        return;
+    }
+
+    if(position == 0){
+        pushFront(data);
+    }
+    else if(length == position){
+        pushBack(data);
+    }
+    else{
+        Node *newCurrent{nullptr};
+        newCurrent->data = data;
+
+        if(position < length/2){
+            Node *explorerOne{head};
+            Node *explorerTwo{nullptr};
+            for (int  i = 1; i < position; i++){
+                explorerTwo = explorerOne;
+                explorerOne = explorerOne->next;
+            }
+            newCurrent->next = explorerOne;
+            newCurrent->previous = explorerTwo;
+
+            newCurrent = nullptr;
+            delete newCurrent;
+        }
+        else{
+            Node *explorerOne{tail->previous};
+            Node *explorerTwo{tail};
+            for (int  i = length; i >= length - position; i--){
+                explorerTwo = explorerOne;
+                explorerOne = explorerOne->previous;
+            }
+            newCurrent->previous = explorerOne;
+            newCurrent->next = explorerTwo;
+
+            newCurrent = nullptr;
+            delete newCurrent;
+        }
+    }
 }
 
 void LinkedList::remove(int position) {
@@ -121,31 +202,31 @@ void LinkedList::popBack() {
 
 }
 
-void LinkedList::popAndGetFront() {
+int LinkedList::popAndGetFront() {
 
 }
 
-void LinkedList::popAndGetBack() {
+int LinkedList::popAndGetBack() {
 
 }
 
-void LinkedList::getFront() {
+int LinkedList::getFront() {
 
 }
 
-void LinkedList::getBack() {
+int LinkedList::getBack() {
 
 }
 
-void LinkedList::size() {
+int LinkedList::size() {
 
 }
 
-void LinkedList::max() {
+int LinkedList::max() {
 
 }
 
-void LinkedList::min() {
+int LinkedList::min() {
 
 }
 
@@ -167,6 +248,33 @@ void LinkedList::build() {
 
 LinkedList::~LinkedList() {
 
+    int length{size()};
+
+    if(length == 0){
+        delete head;
+        delete tail;
+        return;
+    }
+
+    Node *explorer{head};
+    Node *removingNode{nullptr};
+
+    for (int i = 0; i < length-1; i++){
+        removingNode = explorer;
+        explorer = explorer->next;
+        removingNode->next = nullptr;
+        removingNode->previous = nullptr;
+        free(removingNode);
+
+        removingNode = nullptr;
+    }
+
+    explorer->next = nullptr;
+    explorer->previous = nullptr;
+    free(explorer);
+
+    delete head;
+    delete tail;
 }
 
 

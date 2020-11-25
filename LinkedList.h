@@ -21,7 +21,7 @@ private:
 public:
     LinkedList();
     LinkedList(LinkedList &obj);
-    LinkedList(const int array[]);
+    explicit LinkedList(const int array[]);
 
     virtual ~LinkedList();
 
@@ -31,7 +31,7 @@ public:
 
     void pushBack(int data);
     void pushFront(int data);
-    void insert(int data, int position);
+    void insert(int data, unsigned int position);
 
     void remove(int position);
     void findAndRemove(int data);
