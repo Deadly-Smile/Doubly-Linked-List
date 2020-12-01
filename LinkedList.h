@@ -21,7 +21,7 @@ private:
 public:
     LinkedList();
     LinkedList(LinkedList &obj);
-    explicit LinkedList(const int array[]);
+    LinkedList(const int array[], int n);
 
     virtual ~LinkedList();
 

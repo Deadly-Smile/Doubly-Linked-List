@@ -6,13 +6,11 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/List.cpp
-List.h
-C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/List.h
-
-C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/List.h
+C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/LinkedList.h
 
 C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/main.cpp
 iostream
 -
+LinkedList.h
+C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/LinkedList.h
 
