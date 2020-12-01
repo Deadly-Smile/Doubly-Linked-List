@@ -18,10 +18,9 @@ LinkedList::LinkedList(LinkedList &object) {
     }
 }
 
-LinkedList::LinkedList(const int array[]) {
+LinkedList::LinkedList(const int array[], int n) {
 
-    int arraySize = sizeof(array)/sizeof(array[0]);
-    for(int i = 0; i <= arraySize; i++){
+    for(int i = 0; i < n; i++){
         pushBack(array[i]);
     }
 
@@ -95,7 +94,7 @@ int &LinkedList::atPrevious() {
 }
 
 void LinkedList::pushBack(int data) {
-    Node *newCurrent{nullptr};
+    Node *newCurrent = new Node;
     newCurrent->next = nullptr;
     newCurrent->data = data;
 
@@ -104,11 +103,9 @@ void LinkedList::pushBack(int data) {
 
         head = newCurrent;
         tail = newCurrent;
-    }else if(size() == 1){
-        newCurrent->previous = head;
-        tail = newCurrent;
     }else{
         newCurrent->previous = tail;
+        tail->next = newCurrent;
         tail = newCurrent;
     }
 
@@ -117,7 +114,7 @@ void LinkedList::pushBack(int data) {
 }
 
 void LinkedList::pushFront(int data) {
-    Node *newCurrent{nullptr};
+    Node *newCurrent = new Node;
     newCurrent->previous = nullptr;
     newCurrent->data = data;
 
@@ -126,11 +123,9 @@ void LinkedList::pushFront(int data) {
 
         head = newCurrent;
         tail = newCurrent;
-    }else if(size() == 1){
-        newCurrent->next = tail;
-        head = newCurrent;
     }else{
         newCurrent->next = head;
+        head->previous = newCurrent;
         head = newCurrent;
     }
 
@@ -154,7 +149,7 @@ void LinkedList::insert(int data, unsigned int position) {
         pushBack(data);
     }
     else{
-        Node *newCurrent{nullptr};
+        Node *newCurrent = new Node;
         newCurrent->data = data;
 
         if(position < length/2){
@@ -220,6 +215,24 @@ int LinkedList::getBack() {
 
 int LinkedList::size() {
 
+    if(head == nullptr && tail == nullptr){
+        return 0;
+    }
+
+    if (head == tail){
+        return 1;
+    }
+
+    int count{1};
+    Node *newCurrent{head};
+    while (newCurrent != tail){
+        count++;
+        newCurrent = newCurrent->next;
+    }
+
+    newCurrent = nullptr;
+    delete newCurrent;
+    return count;
 }
 
 int LinkedList::max() {
@@ -240,6 +253,18 @@ void LinkedList::sort() {
 
 void LinkedList::display() {
 
+    if(head == nullptr && tail == nullptr){
+        std::cout<<"The List is empty"<<std::endl;
+        return;
+    }
+
+    Node *newCurrent{head};
+    std::cout<<"------------The List------------"<<std::endl;
+    std::cout<<newCurrent->data<<"\n";
+    while (newCurrent != tail){
+        newCurrent = newCurrent->next;
+        std::cout<<newCurrent->data<<"\n";
+    }
 }
 
 void LinkedList::build() {
@@ -265,8 +290,6 @@ LinkedList::~LinkedList() {
         removingNode->next = nullptr;
         removingNode->previous = nullptr;
         free(removingNode);
-
-        removingNode = nullptr;
     }
 
     explorer->next = nullptr;
@@ -275,6 +298,10 @@ LinkedList::~LinkedList() {
 
     delete head;
     delete tail;
+
+    explorer = nullptr;
+    delete explorer;
+    delete removingNode;
 }
 
 
