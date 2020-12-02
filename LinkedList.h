@@ -17,18 +17,14 @@ class LinkedList {
 private:
     Node *head = nullptr;
     Node *tail = nullptr;
-    Node *current = nullptr;
 public:
     LinkedList();
     LinkedList(LinkedList &obj);
-    LinkedList(const int array[], int n);
+    LinkedList(int *start,const int *end);
 
     virtual ~LinkedList();
 
     int &at(int index);
-    int &atNext();
-    int &atPrevious();
-
     void pushBack(int data);
     void pushFront(int data);
     void insert(int data, unsigned int position);

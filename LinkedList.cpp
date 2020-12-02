@@ -13,84 +13,45 @@ LinkedList::LinkedList() {
 LinkedList::LinkedList(LinkedList &object) {
 
     int objectSize{object.size()};
-    for(int i = 0; i <= objectSize; i++){
-        pushBack(object.atNext());
+    for(int i = 1; i <= objectSize; i++){
+        pushBack(object.at(i));
     }
 }
 
-LinkedList::LinkedList(const int array[], int n) {
+LinkedList::LinkedList(int *start,const int *end) {
 
-    for(int i = 0; i < n; i++){
-        pushBack(array[i]);
+    int *newCurrent = start;
+    while (newCurrent != end){
+        pushBack(*newCurrent);
+        newCurrent++;
     }
+    newCurrent = nullptr;
+    delete newCurrent;
 
 }
 
-int &LinkedList::at(int index) {
+int& LinkedList::at(int index) {
+
     int length{size()};
-    if(length <= index){
-        int data{INT_MIN};
-        return data;
-    }else if (length/2 >= index){
-        Node *newCurrent{tail};
-        for(int i = length - 1; i >= index; i--){
-            newCurrent = newCurrent->previous;
-        }
-        int data{newCurrent->data};
 
-        newCurrent = nullptr;
-        delete newCurrent;
-
-        return data;
-    }else{
-        Node *newCurrent{head};
-        for(int i = 0; i < index; i++){
-            newCurrent = newCurrent->next;
-        }
-        int data{newCurrent->data};
-
-        newCurrent = nullptr;
-        delete newCurrent;
-
-        return data;
+    if (length < index || index <= 0){
+        std::cerr << "No such element, index rang is 1 - " << length << std::endl;
+        int *nullPointer{nullptr};
+        return *nullPointer;
     }
 
-
-}
-
-int &LinkedList::atNext() {
-
-    if (current->next == nullptr){
-        int data{INT_MIN};
-        return data;
+    Node *newCurrent{head};
+    for(int i = 1; i < index; i++){
+        newCurrent = newCurrent->next;
     }
-    Node *newCurrent{current->next};
-    current = current->next;
-
-    int data{newCurrent->data};
+    int *data{&newCurrent->data};
 
     newCurrent = nullptr;
     delete newCurrent;
 
-    return data;
-}
+    return *data;
 
-int &LinkedList::atPrevious() {
 
-    if (current->previous == nullptr){
-        int data{INT_MIN};
-        return data;
-    }
-
-    Node *newCurrent{current->previous};
-    current = current->previous;
-
-    int data{newCurrent->data};
-
-    newCurrent = nullptr;
-    delete newCurrent;
-
-    return data;
 }
 
 void LinkedList::pushBack(int data) {
