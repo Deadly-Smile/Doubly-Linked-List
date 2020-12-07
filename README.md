@@ -1,2 +1,2 @@
 # Doubly Linked List
-### IDE is CLion v2020.2.5 
+### IDE is CLion v2020.3
