@@ -8,18 +8,24 @@ int main() {
 
 //    LinkedList myList;
     LinkedList myList(array,array+n);
-    LinkedList otherList(myList);
-    otherList.display();
+//    LinkedList otherList(myList);
+//    otherList.display();
 
-//    myList.at(2) += 2;
-//    std::cout<<myList.at(2)<<std::endl;
+    myList.insert(69,4);
+    myList.display();
+
+    myList.remove(2);
+
+
+//    myList.at(4) += 2;
+//    std::cout<<myList.at(4)<<std::endl;
 
 //    for(int i = 0; i < n; i++){
 //        std::cin >> proxy;
 //        myList.pushFront(proxy);
 //    }
 
-//    myList.display();
+    myList.display();
 
     return 0;
 }

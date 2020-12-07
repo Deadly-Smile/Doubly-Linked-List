@@ -7,51 +7,57 @@
 #include "LinkedList.h"
 
 LinkedList::LinkedList() {
-
+    size = 0;
 }
 
 LinkedList::LinkedList(LinkedList &object) {
 
-    int objectSize{object.size()};
-    for(int i = 1; i <= objectSize; i++){
+    size = object.getSize();
+    for(int i = 1; i <= size; i++){
         pushBack(object.at(i));
     }
 }
 
 LinkedList::LinkedList(int *start,const int *end) {
-
+    size = 0;
     int *newCurrent = start;
     while (newCurrent != end){
         pushBack(*newCurrent);
         newCurrent++;
+        size++;
     }
     newCurrent = nullptr;
     delete newCurrent;
-
 }
 
 int& LinkedList::at(int index) {
-
-    int length{size()};
-
-    if (length < index || index <= 0){
-        std::cerr << "No such element, index rang is 1 - " << length << std::endl;
-        int *nullPointer{nullptr};
-        return *nullPointer;
+    if (size < index || index <= 0){
+        throw std::out_of_range("No such position.");
     }
 
-    Node *newCurrent{head};
-    for(int i = 1; i < index; i++){
-        newCurrent = newCurrent->next;
+    if (size/2 > index){
+        Node *newCurrent{head};
+        for(int i = 1; i < index; i++){
+            newCurrent = newCurrent->next;
+        }
+        int *data{&newCurrent->data};
+
+        newCurrent = nullptr;
+        delete newCurrent;
+
+        return *data;
+    }else{
+        Node *newCurrent{tail};
+        for(int i = size; i > index; i--){
+            newCurrent = newCurrent->previous;
+        }
+        int *data{&newCurrent->data};
+
+        newCurrent = nullptr;
+        delete newCurrent;
+
+        return *data;
     }
-    int *data{&newCurrent->data};
-
-    newCurrent = nullptr;
-    delete newCurrent;
-
-    return *data;
-
-
 }
 
 void LinkedList::pushBack(int data) {
@@ -59,7 +65,7 @@ void LinkedList::pushBack(int data) {
     newCurrent->next = nullptr;
     newCurrent->data = data;
 
-    if(size() == 0){
+    if(size == 0){
         newCurrent->previous = nullptr;
 
         head = newCurrent;
@@ -79,7 +85,7 @@ void LinkedList::pushFront(int data) {
     newCurrent->previous = nullptr;
     newCurrent->data = data;
 
-    if(size() == 0){
+    if(size == 0){
         newCurrent->next = nullptr;
 
         head = newCurrent;
@@ -96,54 +102,49 @@ void LinkedList::pushFront(int data) {
 
 void LinkedList::insert(int data, unsigned int position) {
 
-    int length{size()};
-
-    if(length < position){
-        std::cout<<"No such position, operation failed"<<std::endl;
-        return;
+    if(size < position + 1){
+        throw std::out_of_range("No such position.");
     }
 
-    if(position == 0){
+    if(position == 1){
         pushFront(data);
-    }
-    else if(length == position){
+    } else if(size + 1 == position){
         pushBack(data);
-    }
-    else{
+    } else{
         Node *newCurrent = new Node;
+        newCurrent->previous = nullptr;
+        newCurrent->next = nullptr;
         newCurrent->data = data;
 
-        if(position < length/2){
-            Node *explorerOne{head};
-            Node *explorerTwo{nullptr};
-            for (int  i = 1; i < position; i++){
-                explorerTwo = explorerOne;
-                explorerOne = explorerOne->next;
-            }
-            newCurrent->next = explorerOne;
-            newCurrent->previous = explorerTwo;
-
-            newCurrent = nullptr;
-            delete newCurrent;
+        Node *explorerOne{head};
+        Node *explorerTwo{nullptr};
+        for (int  i = 1; i < position; i++){
+            explorerTwo = explorerOne;
+            explorerOne = explorerOne->next;
         }
-        else{
-            Node *explorerOne{tail->previous};
-            Node *explorerTwo{tail};
-            for (int  i = length; i >= length - position; i--){
-                explorerTwo = explorerOne;
-                explorerOne = explorerOne->previous;
-            }
-            newCurrent->previous = explorerOne;
-            newCurrent->next = explorerTwo;
+        newCurrent->next = explorerOne;
+        newCurrent->previous = explorerTwo;
 
-            newCurrent = nullptr;
-            delete newCurrent;
-        }
+        explorerOne->previous = newCurrent;
+        explorerTwo->next = newCurrent;
+
+        newCurrent = nullptr;
+        delete newCurrent;
+        size++;
     }
 }
 
-void LinkedList::remove(int position) {
+void LinkedList::remove(unsigned int position) {
 
+    if(position == 0 || position > size){
+        throw std::out_of_range("No such position.");
+    }
+
+    Node *current{head};
+    for(int i = 1; i < position; i++){
+        current = current->next;
+    }
+    deleteNode(current);
 }
 
 void LinkedList::findAndRemove(int data) {
@@ -174,26 +175,8 @@ int LinkedList::getBack() {
 
 }
 
-int LinkedList::size() {
-
-    if(head == nullptr && tail == nullptr){
-        return 0;
-    }
-
-    if (head == tail){
-        return 1;
-    }
-
-    int count{1};
-    Node *newCurrent{head};
-    while (newCurrent != tail){
-        count++;
-        newCurrent = newCurrent->next;
-    }
-
-    newCurrent = nullptr;
-    delete newCurrent;
-    return count;
+int LinkedList::getSize() const {
+    return size;
 }
 
 int LinkedList::max() {
@@ -228,42 +211,63 @@ void LinkedList::display() {
     }
 }
 
-void LinkedList::build() {
-
-}
 
 LinkedList::~LinkedList() {
-
-    int length{size()};
-
-    if(length == 0){
+    if(size == 0){
         delete head;
         delete tail;
         return;
     }
 
-    Node *explorer{head};
-    Node *removingNode{nullptr};
+    Node *removingNode{head};
 
-    for (int i = 0; i < length-1; i++){
-        removingNode = explorer;
-        explorer = explorer->next;
-        removingNode->next = nullptr;
-        removingNode->previous = nullptr;
-        free(removingNode);
+    while (removingNode)
+    {
+        auto newCurrent = removingNode;
+        removingNode = removingNode->next;
+        deleteNode(newCurrent);
     }
 
-    explorer->next = nullptr;
-    explorer->previous = nullptr;
-    free(explorer);
+    head = nullptr;
+    tail = nullptr;
 
     delete head;
     delete tail;
-
-    explorer = nullptr;
-    delete explorer;
-    delete removingNode;
 }
+
+void LinkedList::deleteNode(Node *node) {
+    if (size == 0)
+        throw std::out_of_range("Can't delete from empty list.");
+    if (!node)
+        throw std::invalid_argument("Can't delete null pointer.");
+
+    if (node == head && node == tail)
+    {
+        head = tail = nullptr;
+        delete node;
+    } else if (node == head)
+    {
+        head = node->next;
+        node->next->previous = nullptr;
+        delete node;
+    }
+
+    else if (node == tail)
+    {
+        tail = node->previous;
+        node->previous->next = nullptr;
+        delete node;
+    } else{
+        node->next->previous = node->previous;
+        node->previous->next = node->next;
+        delete node;
+    }
+
+    size--;
+}
+
+
+
 
 
 

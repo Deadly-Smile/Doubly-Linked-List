@@ -17,6 +17,7 @@ class LinkedList {
 private:
     Node *head = nullptr;
     Node *tail = nullptr;
+    int size;
 public:
     LinkedList();
     LinkedList(LinkedList &obj);
@@ -29,7 +30,7 @@ public:
     void pushFront(int data);
     void insert(int data, unsigned int position);
 
-    void remove(int position);
+    void remove(unsigned int position);
     void findAndRemove(int data);
     void popFront();
     void popBack();
@@ -38,7 +39,7 @@ public:
     int getFront();
     int getBack();
 
-    int size();
+    int getSize() const;
     int max();
     int min();
 
@@ -48,7 +49,7 @@ public:
     void display();
 
 private:
-    void build();
+    void deleteNode(Node *node);
 };
 
 
