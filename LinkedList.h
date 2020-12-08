@@ -31,7 +31,7 @@ public:
     void insert(int data, unsigned int position);
 
     void remove(unsigned int position);
-    void findAndRemove(int data);
+    bool findAndRemove(int data);
     void popFront();
     void popBack();
     int popAndGetFront();
@@ -43,7 +43,7 @@ public:
     int max();
     int min();
 
-    void search(int data);
+    unsigned int count(int data);
     void sort();
 
     void display();
