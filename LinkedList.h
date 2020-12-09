@@ -15,8 +15,9 @@ struct Node{
 
 class LinkedList {
 private:
-    Node *head = nullptr;
-    Node *tail = nullptr;
+    Node *head;
+    Node *tail;
+    Node *current;
     int size;
 public:
     LinkedList();
@@ -25,7 +26,13 @@ public:
 
     virtual ~LinkedList();
 
-    int &at(int index);
+    int &at(unsigned int index);
+    int &atNext();
+    int &atPrevious();
+    void pointAt(unsigned int position);
+    void pointAtHead();
+    void pointAtTail();
+
     void pushBack(int data);
     void pushFront(int data);
     void insert(int data, unsigned int position);
@@ -39,7 +46,9 @@ public:
     int getFront();
     int getBack();
 
-    int getSize() const;
+    [[nodiscard]] int getSize() const;
+    Node *getCurrentPointer();
+
     int max();
     int min();
 
