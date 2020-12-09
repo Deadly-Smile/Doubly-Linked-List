@@ -5,34 +5,51 @@
 #include <climits>
 #include <iostream>
 #include "LinkedList.h"
+#define Throw(exception)    throw std::out_of_range(exception)
+
 
 LinkedList::LinkedList() {
     size = 0;
+    head = nullptr;
+    tail = nullptr;
+    current = head;
 }
 
-LinkedList::LinkedList(LinkedList &object) {
+LinkedList::LinkedList(LinkedList &object) {        // Deep copy
+    size = 0;
+    head = nullptr;
+    tail = nullptr;
 
-    size = object.getSize();
-    for(int i = 1; i <= size; i++){
-        pushBack(object.at(i));
+    int objectSize = object.getSize();
+    object.pointAtHead();
+    for(int i = 1; i <= objectSize; i++){
+        if (i == 1) pushBack(object.getFront());
+        else        pushBack(object.atNext());
     }
+
+    current = head;
 }
 
 LinkedList::LinkedList(int *start,const int *end) {
+
     size = 0;
+    head = nullptr;
+    tail = nullptr;
+
     int *newCurrent = start;
     while (newCurrent != end){
         pushBack(*newCurrent);
         newCurrent++;
-        size++;
     }
     newCurrent = nullptr;
     delete newCurrent;
+
+    current = head;
 }
 
-int& LinkedList::at(int index) {
-    if (size < index || index <= 0){
-        throw std::out_of_range("No such position.");
+int& LinkedList::at(unsigned int index) {
+    if (size < index || index == 0){
+        Throw("No such position.");
     }
 
     if (size/2 > index){
@@ -60,6 +77,63 @@ int& LinkedList::at(int index) {
     }
 }
 
+int &LinkedList::atPrevious() {
+    if(current == nullptr){
+        Throw("List is empty");
+    }
+    if (current->previous == nullptr){
+        Throw("No such position.");
+    }
+    current = current->previous;
+    return current->data;
+}
+
+int &LinkedList::atNext() {
+    if(current == nullptr){
+        Throw("List is empty");
+    }
+    if (current->next == nullptr){
+        Throw("No such position.");
+    }
+    current = current->next;
+    return current->data;
+}
+
+void LinkedList::pointAt(unsigned int position) {
+    if (size < position || position == 0){
+        Throw("No such position.");
+    }
+    if(position == 1)   pointAtHead();
+    if (position == size)   pointAtTail();
+
+    if(position < size/2){
+        Node *newCurrent{head};
+        for (int i = 1; i < position; ++i) {
+            newCurrent = newCurrent->next;
+        }
+        current = newCurrent;
+        newCurrent = nullptr;
+        delete newCurrent;
+    }else{
+        Node *newCurrent{tail};
+        for (int i = 0; i < size - position; ++i) {
+            newCurrent = newCurrent->previous;
+        }
+        current = newCurrent;
+        newCurrent = nullptr;
+        delete newCurrent;
+    }
+}
+
+void LinkedList::pointAtHead() {
+    current = head;
+}
+
+void LinkedList::pointAtTail() {
+    current = tail;
+}
+
+
 void LinkedList::pushBack(int data) {
     Node *newCurrent = new Node;
     newCurrent->next = nullptr;
@@ -70,12 +144,13 @@ void LinkedList::pushBack(int data) {
 
         head = newCurrent;
         tail = newCurrent;
+        current = head;
     }else{
         newCurrent->previous = tail;
         tail->next = newCurrent;
         tail = newCurrent;
     }
-
+    size++;
     newCurrent = nullptr;
     delete newCurrent;
 }
@@ -90,12 +165,13 @@ void LinkedList::pushFront(int data) {
 
         head = newCurrent;
         tail = newCurrent;
+        current = head;
     }else{
         newCurrent->next = head;
         head->previous = newCurrent;
         head = newCurrent;
     }
-
+    size++;
     newCurrent = nullptr;
     delete newCurrent;
 }
@@ -103,7 +179,7 @@ void LinkedList::pushFront(int data) {
 void LinkedList::insert(int data, unsigned int position) {
 
     if(size < position + 1){
-        throw std::out_of_range("No such position.");
+        Throw("No such position.");
     }
 
     if(position == 1){
@@ -142,45 +218,45 @@ void LinkedList::insert(int data, unsigned int position) {
 void LinkedList::remove(unsigned int position) {
 
     if(position == 0 || position > size){
-        throw std::out_of_range("No such position.");
+        Throw("No such position.");
     }
 
     if(position < size/2){
-        Node *current{head};
+        Node *newCurrent{head};
         for(int i = 1; i < position; i++){
-            current = current->next;
+            newCurrent = newCurrent->next;
         }
-        deleteNode(current);
+        deleteNode(newCurrent);
     }else{
-        Node *current{tail};
+        Node *newCurrent{tail};
         for (int i = 0; i < size - position; ++i) {
-            current = current->previous;
+            newCurrent = newCurrent->previous;
         }
-        deleteNode(current);
+        deleteNode(newCurrent);
     }
 }
 
 bool LinkedList::findAndRemove(int data) {
     if (size == 0){
-        throw std::out_of_range("Can't delete from empty list.");
+        Throw("Can't delete from empty list.");
     }
 
     bool hasDone{false};
 
-    Node *current{head};
+    Node *newCurrent{head};
     Node *backup{nullptr};
     for (int i = 0; i < size; ++i) {
-        backup = current;
-        if(current->data == data){
-            deleteNode(current);
+        backup = newCurrent;
+        if(newCurrent->data == data){
+            deleteNode(newCurrent);
             if (!hasDone)   hasDone = true;
         }
-        current = backup->next;
+        newCurrent = backup->next;
     }
 
-    current = nullptr;
+    newCurrent = nullptr;
     backup = nullptr;
-    delete current;
+    delete newCurrent;
     delete backup;
 
     return hasDone;
@@ -196,7 +272,7 @@ void LinkedList::popBack() {
 
 int LinkedList::popAndGetFront() {
     if (size == 0){
-        throw std::out_of_range("List is empty.");
+        Throw("List is empty.");
     }
 
     int data{head->data};
@@ -206,7 +282,7 @@ int LinkedList::popAndGetFront() {
 
 int LinkedList::popAndGetBack() {
     if (size == 0){
-        throw std::out_of_range("List is empty.");
+        Throw("List is empty.");
     }
 
     int data{tail->data};
@@ -216,7 +292,7 @@ int LinkedList::popAndGetBack() {
 
 int LinkedList::getFront() {
     if (size == 0){
-        throw std::out_of_range("List is empty.");
+        Throw("List is empty.");
     }
 
     return head->data;
@@ -224,7 +300,7 @@ int LinkedList::getFront() {
 
 int LinkedList::getBack() {
     if (size == 0){
-        throw std::out_of_range("List is empty.");
+        Throw("List is empty.");
     }
 
     return tail->data;
@@ -234,20 +310,24 @@ int LinkedList::getSize() const {
     return size;
 }
 
+Node *LinkedList::getCurrentPointer() {
+    return current;
+}
+
 int LinkedList::max() {
     if (size == 0){
-        throw std::out_of_range("List is empty.");
+        Throw("List is empty.");
     }
 
     int currentMax{head->data};
-    Node *current{head};
+    Node *newCurrent{head};
     for (int i = 0; i < size; ++i) {
-        if(current->data > currentMax)
-            currentMax = current->data;
-        current = current->next;
+        if(newCurrent->data > currentMax)
+            currentMax = newCurrent->data;
+        newCurrent = newCurrent->next;
     }
-    current = nullptr;
-    delete current;
+    newCurrent = nullptr;
+    delete newCurrent;
 
     return currentMax;
 }
@@ -255,18 +335,18 @@ int LinkedList::max() {
 int LinkedList::min() {
 
     if (size == 0){
-        throw std::out_of_range("List is empty.");
+        Throw("List is empty.");
     }
 
     int currentMin{head->data};
-    Node *current{head};
+    Node *newCurrent{head};
     for (int i = 0; i < size; ++i) {
-        if(current->data < currentMin)
-            currentMin = current->data;
-        current = current->next;
+        if(newCurrent->data < currentMin)
+            currentMin = newCurrent->data;
+        newCurrent = newCurrent->next;
     }
-    current = nullptr;
-    delete current;
+    newCurrent = nullptr;
+    delete newCurrent;
 
     return currentMin;
 }
@@ -274,16 +354,16 @@ int LinkedList::min() {
 unsigned int LinkedList::count(int data) {
     unsigned int recurrence{0};
 
-    Node *current{head};
+    Node *newCurrent{head};
     for (int i = 0; i < size; ++i) {
-        if(current->data == data){
+        if(newCurrent->data == data){
             recurrence++;
         }
-        current = current->next;
+        newCurrent = newCurrent->next;
     }
 
-    current = nullptr;
-    delete current;
+    newCurrent = nullptr;
+    delete newCurrent;
 
     return recurrence;
 }
@@ -294,22 +374,22 @@ void LinkedList::sort() {
 
 void LinkedList::display() {
 
-    if(head == nullptr && tail == nullptr){
+    if(getSize() == 0){
         std::cout<<"The List is empty"<<std::endl;
         return;
     }
 
-    Node *current{head};
+    Node *newCurrent{head};
     std::cout<<"------------The List------------"<<std::endl;
-    std::cout << current->data << "\n";
-    while (current != tail){
-        current = current->next;
-        std::cout << current->data << "\n";
+    std::cout << newCurrent->data << "\n";
+    while (newCurrent != tail){
+        newCurrent = newCurrent->next;
+        std::cout << newCurrent->data << "\n";
     }
     std::cout<<"------------The end!------------"<<std::endl;
 
-    current = nullptr;
-    delete current;
+    newCurrent = nullptr;
+    delete newCurrent;
 }
 
 
@@ -317,6 +397,7 @@ LinkedList::~LinkedList() {
     if(size == 0){
         delete head;
         delete tail;
+        delete current;
         return;
     }
 
@@ -330,17 +411,19 @@ LinkedList::~LinkedList() {
 
     head = nullptr;
     tail = nullptr;
+    current = nullptr;
 
     delete head;
     delete tail;
+    delete current;
 }
 
 void LinkedList::deleteNode(Node *node) {
     if (size == 0){
-        throw std::out_of_range("Can't delete from empty list.");
+        Throw("Can't delete from empty list.");
     }
     if (!node){
-        throw std::invalid_argument("Can't delete null pointer.");
+        Throw("Can't delete null pointer.");
     }
 
     if (node == head && node == tail) {
@@ -362,3 +445,7 @@ void LinkedList::deleteNode(Node *node) {
 
     size--;
 }
+
+
+
+
