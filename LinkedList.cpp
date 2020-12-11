@@ -2,11 +2,11 @@
 // Created by Anik on 11/25/2020.
 //
 
-#include <climits>
 #include <iostream>
 #include "LinkedList.h"
-#define Throw(exception)    throw std::out_of_range(exception)
+#include <algorithm>
 
+#define Throw(exception)    throw std::out_of_range(exception)
 
 LinkedList::LinkedList() {
     size = 0;
@@ -368,9 +368,50 @@ unsigned int LinkedList::count(int data) {
     return recurrence;
 }
 
-void LinkedList::sort() {
+void LinkedList::sort() {       // Maybe the worst algorithm
 
+    if(size == 0 || size == 1){
+        return;
+    }
+
+    int arr[size];
+    Node *newCurrent{head};
+
+    for (int i = 0; i < size; ++i) {
+        arr[i] = newCurrent->data;
+        newCurrent = newCurrent->next;
+    }
+
+    std::sort(arr,arr+size);
+    newCurrent = head;
+
+    for (int i = 0; i < size; ++i) {
+         newCurrent->data = arr[i];
+        newCurrent = newCurrent->next;
+    }
+
+    newCurrent = nullptr;
+    delete newCurrent;
 }
+
+bool LinkedList::isSorted() {
+    if(size == 0 || size == 1){
+        return true;
+    }
+    Node *newCurrent{head};
+    bool isOk{true};
+    for (int i = 1; i < size && isOk; ++i) {
+        if (newCurrent->data > newCurrent->next->data){
+            isOk = false;
+        }
+        newCurrent = newCurrent->next;
+    }
+
+    newCurrent = nullptr;
+    delete newCurrent;
+    return isOk;
+}
+
 
 void LinkedList::display() {
 
@@ -446,6 +487,13 @@ void LinkedList::deleteNode(Node *node) {
     size--;
 }
 
+Node *LinkedList::getHead() {
+    return head;
+}
+
+Node *LinkedList::getTail() {
+    return tail;
+}
 
 
 
