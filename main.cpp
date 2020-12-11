@@ -1,10 +1,11 @@
 #include <iostream>
 #include "LinkedList.h"
+#include <iterator>
 
 int main() {
 
-    int n{5},proxy{0};
-    int array[5] = {10,20,30,40,50};
+    int n{10},proxy{0};
+    int array[] = {10,200,3,40,590,12,8,3,1,65};
 
 //    LinkedList myList;
     LinkedList myList(array,array+n);
@@ -12,15 +13,29 @@ int main() {
 //    otherList.display();
 
 //    myList.insert(69,4);
-    myList.atNext() += 50;
-    std::cout << myList.atNext() << std::endl;
-    myList.atPrevious() += 50;
-    std::cout << myList.atPrevious() << std::endl;
-    myList.pointAt(3);
-    std::cout << myList.atNext() << std::endl;
+//    myList.atNext() += 50;
+//    std::cout << myList.atNext() << std::endl;
+//    myList.atPrevious() += 50;
+//    std::cout << myList.atPrevious() << std::endl;
+//    myList.pointAt(3);
+//    std::cout << myList.atNext() << std::endl;
+//
+//    myList.getCurrentPointer()->data = 1000;
+//    std::cout << myList.getCurrentPointer()->data << std::endl;
 
-    myList.getCurrentPointer()->data = 1000;
-    std::cout << myList.getCurrentPointer()->data << std::endl;
+    if (myList.isSorted()){
+        std::cout << "List is sorted" << std::endl;
+    } else{
+        std::cout << "List is NOT sorted" << std::endl;
+    }
+
+    myList.sort();
+
+    if (myList.isSorted()){
+        std::cout << "List is sorted" << std::endl;
+    } else{
+        std::cout << "List is NOT sorted" << std::endl;
+    }
 
 //    myList.display();
 //

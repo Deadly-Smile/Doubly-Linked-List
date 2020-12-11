@@ -6,10 +6,14 @@
 #define DOUBLY_LINKED_LIST_LINKEDLIST_H
 
 
-struct Node{
+class Node{
+public:
     Node *previous;
     Node *next;
     int data;
+    bool operator < (Node *node) const{
+        return this->data < node->data;
+    }
 };
 
 
@@ -54,11 +58,14 @@ public:
 
     unsigned int count(int data);
     void sort();
+    bool isSorted();
 
     void display();
 
 private:
     void deleteNode(Node *node);
+    Node *getHead();
+    Node *getTail();
 };
 
 
