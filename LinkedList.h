@@ -7,6 +7,8 @@
 
 #include <iostream>
 #include <algorithm>
+#include <string>
+using std::string;
 #define Throw(exception)    throw std::out_of_range(exception)
 
 template<typename T>
@@ -345,6 +347,24 @@ public:
         return currentMax;
     }
 
+    T max(bool compare(T , T)){
+        if (size == 0){
+            Throw("List is empty.");
+        }
+
+        T currentMax{head->data};
+        Node<T> *newCurrent{head};
+        for (int i = 0; i < size; ++i) {
+            if(!compare(newCurrent->data , currentMax))
+                currentMax = newCurrent->data;
+            newCurrent = newCurrent->next;
+        }
+        newCurrent = nullptr;
+        delete newCurrent;
+
+        return currentMax;
+    }
+
     T min(){
         if (size == 0){
             Throw("List is empty.");
@@ -354,6 +374,24 @@ public:
         Node<T> *newCurrent{head};
         for (int i = 0; i < size; ++i) {
             if(newCurrent->data < currentMin)
+                currentMin = newCurrent->data;
+            newCurrent = newCurrent->next;
+        }
+        newCurrent = nullptr;
+        delete newCurrent;
+
+        return currentMin;
+    }
+
+    T min(bool compare(T , T)){
+        if (size == 0){
+            Throw("List is empty.");
+        }
+
+        T currentMin{head->data};
+        Node<T> *newCurrent{head};
+        for (int i = 0; i < size; ++i) {
+            if(compare(newCurrent->data , currentMin))
                 currentMin = newCurrent->data;
             newCurrent = newCurrent->next;
         }
@@ -405,6 +443,31 @@ public:
         delete newCurrent;
     }
 
+    void sort(bool compare(T , T)){        // Maybe the worst algorithm
+        if(size == 0 || size == 1){
+            return;
+        }
+
+        T arr[size];
+        Node<T> *newCurrent{head};
+
+        for (int i = 0; i < size; ++i) {
+            arr[i] = newCurrent->data;
+            newCurrent = newCurrent->next;
+        }
+
+        std::sort(arr,arr+size,compare);
+        newCurrent = head;
+
+        for (int i = 0; i < size; ++i) {
+            newCurrent->data = arr[i];
+            newCurrent = newCurrent->next;
+        }
+
+        newCurrent = nullptr;
+        delete newCurrent;
+    }
+
     bool isSorted(){
         if(size == 0 || size == 1){
             return true;
@@ -416,6 +479,27 @@ public:
                 isOk = false;
             }
             newCurrent = newCurrent->next;
+        }
+
+        newCurrent = nullptr;
+        delete newCurrent;
+        return isOk;
+    }
+
+    bool isSorted(bool compare(T , T)){
+        if(size == 0 || size == 1){
+            return true;
+        }
+        Node<T> *newCurrent{head};
+        T backup1,backup2;
+        bool isOk{true};
+        for (int i = 1; i < size && isOk; ++i) {
+            backup1 = newCurrent->data;
+            newCurrent = newCurrent->next;
+            backup2 = newCurrent->data;
+            if (!compare(backup1 , backup2)){
+                isOk = false;
+            }
         }
 
         newCurrent = nullptr;
@@ -508,10 +592,5 @@ private:
         return current;
     }
 };
-
-
-
-
-
 
 #endif //DOUBLY_LINKED_LIST_LINKEDLIST_H
