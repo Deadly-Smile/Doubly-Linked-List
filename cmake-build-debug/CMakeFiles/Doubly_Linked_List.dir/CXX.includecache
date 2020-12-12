@@ -11,6 +11,8 @@ iostream
 -
 algorithm
 -
+string
+-
 
 C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/main.cpp
 iostream
@@ -18,5 +20,7 @@ iostream
 LinkedList.h
 C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/LinkedList.h
 iterator
+-
+string
 -
 

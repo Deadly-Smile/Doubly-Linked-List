@@ -1,15 +1,34 @@
 #include <iostream>
 #include "LinkedList.h"
 #include <iterator>
+#include <string>
+
+bool compare(std::string s1, std::string s2){
+    if ((s1.length() == s2.length()) || (s1.length() > s2.length())){
+        return false;       // For some reason >= is not working in isSorted method
+    }
+    return true;
+}
 
 int main() {
 
-    int n{10};
-    double proxy{0};
-    double array[] = {1.0050,20.350,3.302,40.254,5.90,1.2,0.08,.3,0.000001,6.5};
+    int n{5};
+//    double proxy{0};
+//    double array[] = {1.0050,20.350,3.302,40.254,5.90,1.2,0.08,.3,0.000001,6.5};
+
+    std::string array[] = {
+            "I am Anik Saha",
+            "I am anik",
+            "I am Roni Saha",
+            "I am anik kumar Saha",
+            "LinkedList<double> myList;"
+    };
 
 //    LinkedList<double> myList;
-    LinkedList<double> myList(array,array+n);
+//    LinkedList<double> myList(array,array+n);
+    LinkedList<std::string> myList(array,array+n);
+    myList.display();
+
 //    LinkedList otherList(myList);
 //    otherList.display();
 //
@@ -23,7 +42,7 @@ int main() {
 //
 //    myList.getCurrentData() = 1000;
 //    std::cout << myList.getCurrentData() << std::endl;
-//
+
 //    if (myList.isSorted()){
 //        std::cout << "List is sorted" << std::endl;
 //    } else{
@@ -37,6 +56,20 @@ int main() {
 //    } else{
 //        std::cout << "List is NOT sorted" << std::endl;
 //    }
+
+    if (myList.isSorted(compare)){
+        std::cout << "List is sorted" << std::endl;
+    } else{
+        std::cout << "List is NOT sorted" << std::endl;
+    }
+
+    myList.sort(compare);
+
+    if (myList.isSorted(compare)){
+        std::cout << "List is sorted" << std::endl;
+    } else{
+        std::cout << "List is NOT sorted" << std::endl;
+    }
 //
 //    myList.display();
 //

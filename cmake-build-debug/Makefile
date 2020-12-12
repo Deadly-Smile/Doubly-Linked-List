@@ -142,33 +142,6 @@ Doubly_Linked_List/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Doubly_Linked_List.dir\build.make CMakeFiles/Doubly_Linked_List.dir/build
 .PHONY : Doubly_Linked_List/fast
 
-LinkedList.obj: LinkedList.cpp.obj
-
-.PHONY : LinkedList.obj
-
-# target to build an object file
-LinkedList.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Doubly_Linked_List.dir\build.make CMakeFiles/Doubly_Linked_List.dir/LinkedList.cpp.obj
-.PHONY : LinkedList.cpp.obj
-
-LinkedList.i: LinkedList.cpp.i
-
-.PHONY : LinkedList.i
-
-# target to preprocess a source file
-LinkedList.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Doubly_Linked_List.dir\build.make CMakeFiles/Doubly_Linked_List.dir/LinkedList.cpp.i
-.PHONY : LinkedList.cpp.i
-
-LinkedList.s: LinkedList.cpp.s
-
-.PHONY : LinkedList.s
-
-# target to generate assembly for a file
-LinkedList.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Doubly_Linked_List.dir\build.make CMakeFiles/Doubly_Linked_List.dir/LinkedList.cpp.s
-.PHONY : LinkedList.cpp.s
-
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -205,9 +178,6 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... Doubly_Linked_List
-	@echo ... LinkedList.obj
-	@echo ... LinkedList.i
-	@echo ... LinkedList.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

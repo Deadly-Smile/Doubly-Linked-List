@@ -80,9 +80,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/LinkedList.cpp">
-			<Option target="Doubly_Linked_List"/>
-		</Unit>
 		<Unit filename="C:/Users/Anik/Documents/doubly linked list/Doubly-Linked-List/LinkedList.h">
 			<Option target="Doubly_Linked_List"/>
 		</Unit>
