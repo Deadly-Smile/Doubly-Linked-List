@@ -380,7 +380,7 @@ public:
         return recurrence;
     }
 
-    void sort(){
+    void sort(){        // Maybe the worst algorithm
         if(size == 0 || size == 1){
             return;
         }
@@ -403,7 +403,7 @@ public:
 
         newCurrent = nullptr;
         delete newCurrent;
-    }       // Maybe the worst algorithm
+    }
 
     bool isSorted(){
         if(size == 0 || size == 1){
